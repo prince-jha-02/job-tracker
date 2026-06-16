@@ -63,15 +63,15 @@ const loginUser=async (req,res)=>{
     try {
         const {email,password}=req.body;
 
-        const user=await user.findOne({email});
+        const presentUser=await user.findOne({email});
 
-        if(!user){
+        if(!presentUser){
             return res.json({success:false,message:"uder doesnot exist"})
         }
-        const isMatch=await bcrypt.compare(password,user.password);
+        const isMatch=await bcrypt.compare(password,presentUser.password);
 
         if(isMatch){
-            const token=createToken(user._id)
+            const token=createToken(presentUser._id)
             res.json({success:true,token})
         }
         else{
