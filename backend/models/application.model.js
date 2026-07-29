@@ -52,13 +52,32 @@ const applicationSchema = new mongoose.Schema(
 
     salary: Number,
 
-   
+
 
     jobUrl: String,
 
     notes: String,
 
-    tags: [String]
+    tags: [String],
+
+    event: {
+      title: {
+        type: String,
+      },
+
+      scheduledAt: {
+        type: Date,
+      },
+
+      location: {
+        type: String,
+      },
+
+      completed: {
+        type: Boolean,
+        default: false,
+      },
+    },
   },
   {
     timestamps: true
@@ -72,6 +91,6 @@ const applicationSchema = new mongoose.Schema(
 //   );
 
 
-const Application=mongoose.model("Application", applicationSchema);
+const Application = mongoose.model("Application", applicationSchema);
 
 export default Application;

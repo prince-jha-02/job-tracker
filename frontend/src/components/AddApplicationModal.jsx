@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useApplication } from "../context/Application.context";
-
+import AddEvent from "./AddEvent";
 function AddApplicationModal({ setShowForm, editingJob }) {
   const { createApplication, updateApplication } = useApplication();
 
@@ -15,6 +15,7 @@ function AddApplicationModal({ setShowForm, editingJob }) {
     jobUrl: "",
     notes: "",
     tags: [],
+    events: [],
   };
 
   const [formData, setFormData] = useState(initialState);
@@ -227,6 +228,8 @@ function AddApplicationModal({ setShowForm, editingJob }) {
             />
           </div>
         </div>
+
+        
 
         {/* Footer */}
         <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">

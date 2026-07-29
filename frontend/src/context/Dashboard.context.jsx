@@ -48,6 +48,8 @@ function DashboardProvider({ children }) {
     },
   });
 
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+
   const getDashboardStats = async () => {
 
     try {
@@ -120,6 +122,26 @@ function DashboardProvider({ children }) {
 
   };
 
+  const getUpcomingEvents = async () => {
+  try {
+    const response = await axios.get(
+       backendUrl + "/api/applications/upcoming-events",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    
+    
+    if (response.data.success) {
+      setUpcomingEvents(response.data.events);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
   return (
 
     <DashboardContext.Provider
@@ -134,6 +156,9 @@ function DashboardProvider({ children }) {
         getDashboardStats,
 
         getAnalytics,
+
+        getUpcomingEvents,
+        upcomingEvents,
 
       }}
     >

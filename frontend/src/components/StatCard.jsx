@@ -1,26 +1,15 @@
-function StatCard({ title, value, icon, bgColor, textColor }) {
-  return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4 hover:border-gray-300 hover:shadow-sm transition-all duration-200 flex flex-col justify-between group">
-      
-      <div className="flex justify-between items-start mb-2">
-        <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-          {title}
-        </p>
-        <div
-          className={`w-8 h-8 rounded-md flex items-center justify-center transition-transform group-hover:scale-105 ${bgColor}`}
-        >
-          <div className={textColor}>
-            {icon}
-          </div>
-        </div>
-      </div>
+import React from "react";
 
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-          {value}
-        </h2>
+function StatCard({ title, value, icon, iconBgColor, iconTextColor }) {
+  return (
+    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 transition-all hover:shadow-md">
+      <div className={`p-3 rounded-xl flex-shrink-0 ${iconBgColor} ${iconTextColor}`}>
+        {icon}
       </div>
-      
+      <div>
+        <p className="text-sm font-medium text-gray-500 mb-0.5">{title}</p>
+        <h3 className="text-2xl font-bold text-gray-900">{value}</h3>
+      </div>
     </div>
   );
 }

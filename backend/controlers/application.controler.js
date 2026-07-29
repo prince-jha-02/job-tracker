@@ -631,6 +631,80 @@ const getAnalytics = async (req, res) => {
   }
 };
 
+const updateEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { title, scheduledAt, location } = req.body;
+
+    if (!title || !scheduledAt) {
+      return res.status(400).json({
+        success: false,
+        message: "Title and scheduled date are required",
+      });
+    }
+
+    const application = await Application.findOne({
+      _id: id,
+      userId: req.user._id,
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Application not found",
+      });
+    }
+
+    application.event = {
+      title,
+      scheduledAt,
+      location,
+      completed: false,
+    };
+
+    await application.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Event updated successfully",
+      application,
+    });
+
+  } catch (error) {
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+};
+
+
+const getUpcomingEvents = async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+   
+
+    const events = await Application.find({
+      userId: req.user._id,
+      "event.scheduledAt": { $gte: today },
+    });
+
+    console.log("Events:", events);
+
+    res.json({
+      success: true,
+      events,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   createApplication,
   updateApplication,
@@ -639,4 +713,6 @@ export {
   getApplicationById,
   getDashboardStats,
   getAnalytics,
+  updateEvent,
+  getUpcomingEvents,
 };

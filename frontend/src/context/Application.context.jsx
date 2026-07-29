@@ -163,13 +163,60 @@ function ApplicationProvider({ children }) {
     }
   };
 
+
+  const updateEvent = async (id, updatedData) => {
+     console.log("Frontend: getUpcomingEvents called");
+    try {
+
+      const response = await axios.patch(
+        `${backendUrl}/api/applications/${id}/event`,
+        updatedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+
+        setApplications((prev) =>
+          prev.map((job) =>
+            job._id === id
+              ? response.data.application
+              : job
+          )
+        );
+
+        toast.success(response.data.message);
+
+        return true;
+
+      } else {
+
+        toast.error(response.data.message);
+        return false;
+
+      }
+
+    } catch (error) {
+
+      toast.error(
+        error.response?.data?.message || error.message
+      );
+
+      return false;
+
+    }
+  };
   const value = {
     applications,
     setApplications,
     getApplications,
     createApplication,
     deleteApplication,
-    updateApplication
+    updateApplication,
+    updateEvent
   };
 
   return (

@@ -1,7 +1,7 @@
 import express from 'express'
 
 import protect from '../midleware/auth.js';
-import { createApplication,updateApplication, deleteApplication, getApplications, getDashboardStats,getAnalytics } from '../controlers/application.controler.js';
+import { createApplication,updateApplication, deleteApplication, getApplications, getDashboardStats,getAnalytics,updateEvent,getUpcomingEvents } from '../controlers/application.controler.js';
 
 const appRouter=express.Router();
 
@@ -33,6 +33,18 @@ appRouter.delete(
   "/:id",
   protect,
   deleteApplication
+);
+
+appRouter.patch(
+  "/:id/event",
+  protect,
+  updateEvent
+);
+
+appRouter.get(
+    "/upcoming-events",
+    protect,
+    getUpcomingEvents
 );
 
 appRouter.get("/analytics", protect, getAnalytics);

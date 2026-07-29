@@ -1,8 +1,12 @@
 import { MapPin, Calendar, IndianRupee, Briefcase } from "lucide-react";
 import { useApplication } from "../context/Application.context";
+import { useState } from "react";
+import EventModal from "./EventModal";
 
 function ApplicationCard({ job, setShowForm, setEditingJob }) {
   const { deleteApplication, updateApplication } = useApplication();
+
+  const [showEventModal, setShowEventModal] = useState(false);
 
   const handleDelete = async () => {
     if (window.confirm("Delete this application?")) {
@@ -31,7 +35,7 @@ function ApplicationCard({ job, setShowForm, setEditingJob }) {
 
   return (
     <div className="bg-white border border-gray-200 rounded-md p-3 hover:border-gray-300 transition-colors flex flex-col gap-2">
-      
+
       {/* Top Row: Title & Status */}
       <div className="flex justify-between items-center gap-2">
         <div className="flex items-center gap-1.5 truncate">
@@ -95,6 +99,76 @@ function ApplicationCard({ job, setShowForm, setEditingJob }) {
         )}
       </div>
 
+      {/* Event Section */}
+
+      <div className="mt-2">
+
+        {job.event ?.scheduledAt? (
+
+          <div className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2">
+
+            <div className="flex justify-between items-start">
+
+              <div>
+
+                <p className="text-[10px] uppercase tracking-wide text-blue-500 font-semibold">
+                  Upcoming Event
+                </p>
+
+                <h3 className="text-sm font-semibold text-gray-800 mt-1">
+                  {job.event.title}
+                </h3>
+
+                <p className="text-xs text-gray-500 mt-1">
+                  {new Date(job.event.scheduledAt).toLocaleString()}
+                </p>
+
+                {job.event.location && (
+
+                  <p className="text-xs text-gray-500">
+
+                    📍 {job.event.location}
+
+                  </p>
+
+                )}
+
+              </div>
+
+            </div>
+
+          </div>
+
+        ) : (
+
+          <div className="rounded-lg border border-dashed border-gray-300 px-3 py-3 flex justify-between items-center">
+
+            <div>
+
+              <p className="text-sm font-medium text-gray-600">
+                No upcoming event
+              </p>
+
+              <p className="text-xs text-gray-400">
+                Schedule your next OA or interview
+              </p>
+
+            </div>
+
+            <button
+              onClick={() => setShowEventModal(true)}
+              className="text-xs bg-black text-white px-3 py-2 rounded-md hover:bg-gray-800"
+            >
+              Add Event
+            </button>
+
+          </div>
+
+        )}
+
+      </div>
+
+
       {/* Bottom Row: Notes & Actions */}
       <div className="flex justify-between items-center gap-4 mt-2">
         {job.notes ? (
@@ -108,23 +182,44 @@ function ApplicationCard({ job, setShowForm, setEditingJob }) {
 
         {/* Updated: Larger, clearly defined buttons */}
         <div className="flex gap-2 shrink-0">
+
           <button
             onClick={() => {
               setEditingJob(job);
               setShowForm(true);
             }}
-            className="text-xs font-medium px-3 py-1 bg-white border border-gray-200 rounded text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+            className="text-xs font-medium px-3 py-1 bg-white border rounded"
           >
             Edit
           </button>
+
+          <button
+            onClick={() => setShowEventModal(true)}
+            className="text-xs font-medium px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            {job.event ? "Event" : "Add Event"}
+          </button>
+
           <button
             onClick={handleDelete}
-            className="text-xs font-medium px-3 py-1 bg-white border border-red-100 rounded text-red-500 hover:bg-red-50 hover:text-red-700 transition-colors"
+            className="text-xs font-medium px-3 py-1 bg-white border border-red-200 rounded text-red-500"
           >
             Delete
           </button>
+
         </div>
       </div>
+
+      {
+  showEventModal && (
+
+    <EventModal
+      application={job}
+      setShowEventModal={setShowEventModal}
+    />
+
+  )
+}
 
     </div>
   );
