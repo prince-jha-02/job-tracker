@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-// Added X and MoreVertical icons for the mobile menu
-import { Menu, X, MoreVertical } from "lucide-react"; 
+import { Menu, X, MoreVertical, CircleUserRound } from "lucide-react"; 
 import { assets } from "../assets/assets";
 import { useAuth } from "../context/auth.context";
 
@@ -20,8 +19,8 @@ function Navbar({ setSidebarOpen, showSidebar }) {
   };
 
   return (
-    // Added relative positioning to the nav so the dropdown attaches to it
     <nav className="relative bg-white shadow z-50">
+      {/* Added the missing closing tag for this main flex container at the bottom */}
       <div className="flex items-center justify-between px-6 py-4">
         
         {/* Left */}
@@ -53,19 +52,19 @@ function Navbar({ setSidebarOpen, showSidebar }) {
           
           {/* Profile Container */}
           <div className="relative">
-            <img
-              src={assets.profile_icon}
-              alt="Profile"
-              className="w-8 h-8 cursor-pointer rounded-full border border-gray-200"
+            <div 
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 cursor-pointer transition-colors"
               onClick={() => {
                 if (!token) {
                   navigate("/");
                 } else {
                   setProfileOpen(!profileOpen);
-                  setMobileMenuOpen(false); // Close mobile menu if profile opens
+                  setMobileMenuOpen(false);
                 }
               }}
-            />
+            >
+              <CircleUserRound size={24} strokeWidth={1.5} />
+            </div>
 
             {token && profileOpen && (
               <div className="absolute right-0 mt-3 w-36 bg-white shadow-lg rounded-lg border border-gray-100 overflow-hidden">
@@ -79,18 +78,19 @@ function Navbar({ setSidebarOpen, showSidebar }) {
             )}
           </div>
 
-          {/* Mobile Menu Toggle (Hidden on Desktop) */}
+          {/* Mobile Menu Toggle (Hidden on Desktop) - Added back in! */}
           <button 
             className="md:hidden text-gray-700 p-1"
             onClick={() => {
               setMobileMenuOpen(!mobileMenuOpen);
-              setProfileOpen(false); // Close profile menu if mobile menu opens
+              setProfileOpen(false);
             }}
           >
             {mobileMenuOpen ? <X size={24} /> : <MoreVertical size={24} />}
           </button>
+
         </div>
-      </div>
+      </div> {/* <-- This closing div was missing in your snippet */}
 
       {/* Mobile Links Dropdown */}
       {mobileMenuOpen && (
